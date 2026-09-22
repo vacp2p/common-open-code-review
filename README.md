@@ -5,8 +5,10 @@ deliberately follows the latest upstream release through
 `alibaba/open-code-review@main` and its default `ocr_version: latest`.
 
 The workflow checks out its own shared Nim review rules, rather than rules from
-the pull request being reviewed. Repository-specific rules belong in the
-consumer repository and should not duplicate these common rules.
+the pull request being reviewed. The compact `rule.json` entry links to
+`nim-code-review.md`, which contains the detailed guidance. Repository-specific
+rules belong in the consumer repository and should not duplicate these common
+rules.
 
 ## Consumer workflow
 
