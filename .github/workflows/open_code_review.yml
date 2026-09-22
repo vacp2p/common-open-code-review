@@ -84,6 +84,28 @@ jobs:
           ref: main
           path: .common-open-code-review
 
+      # OCR checks out the consumer at the workspace root, deleting the shared
+      # checkout. Materialize self-contained rules outside that workspace first.
+      - name: Prepare shared Nim rules
+        id: rules
+        shell: bash
+        env:
+          RULE_SOURCE: ${{ github.workspace }}/.common-open-code-review/.opencodereview
+        run: |
+          rules_dir="$(mktemp -d "$RUNNER_TEMP/common-ocr-rules.XXXXXX")"
+          test -s "$RULE_SOURCE/nim-code-review.md"
+          jq --rawfile nim "$RULE_SOURCE/nim-code-review.md" '
+            .rules |= map(
+              if .path == "**/*.nim" then
+                .rule = (
+                  (.rule | split("[shared Nim code-review rules](nim-code-review.md)") | join("shared Nim code-review rules below"))
+                  + "\n\n" + $nim
+                )
+              else . end
+            )
+          ' "$RULE_SOURCE/rule.json" > "$rules_dir/rule.json"
+          echo "path=$rules_dir/rule.json" >> "$GITHUB_OUTPUT"
+
       # Do not pin this reference or set ocr_version: both intentionally track
       # the newest OpenCodeReview action and CLI release.
       - name: Review with OpenCodeReview
@@ -95,4 +117,4 @@ jobs:
           llm_use_anthropic: 'false'
           base_ref: ${{ steps.pr.outputs.base_ref }}
           head_sha: ${{ steps.pr.outputs.head_sha }}
-          rule: ${{ github.workspace }}/.common-open-code-review/.opencodereview/rule.json
+          rule: ${{ steps.rules.outputs.path }}

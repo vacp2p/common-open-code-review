@@ -10,6 +10,12 @@ the pull request being reviewed. The compact `rule.json` entry links to
 rules belong in the consumer repository and should not duplicate these common
 rules.
 
+Before invoking OCR, the workflow embeds the Markdown guidance into a generated
+JSON rule file in the runner's temporary directory. This ensures OCR receives
+the full guidance and keeps the rules available when its internal checkout
+replaces the workspace contents. Edit the Markdown source to change the rules;
+the generated JSON is not committed.
+
 ## Consumer workflow
 
 GitHub requires the `issue_comment` event trigger to be declared by each
