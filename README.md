@@ -13,11 +13,25 @@ consumer repository and should not duplicate these common rules.
 GitHub requires the `issue_comment` event trigger to be declared by each
 consumer. Everything after that trigger is shared, including `/review` model
 selection, the authorized-user list, concurrency, the acknowledgement reaction,
-permissions, and the review action. Consumers need only:
+and the review action. Consumers need only:
 
 ```yaml
+name: Open Code Review
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
 jobs:
   review:
     uses: vacp2p/common-open-code-review/.github/workflows/open_code_review.yml@main
     secrets: inherit
 ```
+
+The caller declares this permission ceiling because GitHub does not allow a
+called workflow to raise its caller's token permissions.
