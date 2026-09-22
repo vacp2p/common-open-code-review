@@ -2,6 +2,9 @@ name: Common OpenCodeReview
 
 on:
   workflow_call:
+    secrets:
+      DEEPSEEK_API_KEY:
+        required: true
 
 # A newer authorized /review command supersedes a review that is still running.
 # Other comments get unique groups, so they cannot cancel a PR review.
