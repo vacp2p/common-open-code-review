@@ -1,11 +1,11 @@
 # Common OpenCodeReview
 
-Reusable GitHub workflow and composite action for OpenCodeReview in VAC Nim
-repositories. It deliberately follows the latest upstream release through
+Reusable GitHub workflow for OpenCodeReview in VAC Nim repositories. It
+deliberately follows the latest upstream release through
 `alibaba/open-code-review@main` and its default `ocr_version: latest`.
 
-The action supplies shared Nim review rules from its own checkout, rather than
-from the pull request being reviewed. Repository-specific rules belong in the
+The workflow checks out its own shared Nim review rules, rather than rules from
+the pull request being reviewed. Repository-specific rules belong in the
 consumer repository and should not duplicate these common rules.
 
 ## Consumer workflow

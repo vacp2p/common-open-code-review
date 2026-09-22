@@ -72,8 +72,19 @@ jobs:
               content: 'eyes',
             });
 
-      - name: Review with shared Nim rules
-        uses: vacp2p/common-open-code-review@main
+      # The shared rules are checked out from this trusted repository, never
+      # from the pull request branch being reviewed.
+      - name: Check out shared Nim rules
+        uses: actions/checkout@v4
+        with:
+          repository: vacp2p/common-open-code-review
+          ref: main
+          path: .common-open-code-review
+
+      # Do not pin this reference or set ocr_version: both intentionally track
+      # the newest OpenCodeReview action and CLI release.
+      - name: Review with OpenCodeReview
+        uses: alibaba/open-code-review@main
         with:
           llm_url: https://api.deepseek.com/chat/completions
           llm_auth_token: ${{ secrets.DEEPSEEK_API_KEY }}
@@ -81,3 +92,4 @@ jobs:
           llm_use_anthropic: 'false'
           base_ref: ${{ steps.pr.outputs.base_ref }}
           head_sha: ${{ steps.pr.outputs.head_sha }}
+          rule: ${{ github.workspace }}/.common-open-code-review/.opencodereview/rule.json
