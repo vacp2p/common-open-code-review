@@ -60,7 +60,7 @@ jobs:
                 secret: 'DEEPSEEK_API_KEY',
               },
               qwen: {
-                url: 'https://dashscope-us.aliyuncs.com/compatible-mode/v1/chat/completions',
+                url: 'https://token-plan.maas.qwencloudapi.com/compatible-mode/v1/chat/completions',
                 secret: 'QWEN_API_KEY',
               },
             };
