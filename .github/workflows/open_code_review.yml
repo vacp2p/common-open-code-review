@@ -58,10 +58,12 @@ jobs:
               deepseek: {
                 url: 'https://api.deepseek.com/chat/completions',
                 secret: 'DEEPSEEK_API_KEY',
+                extraBody: '{"thinking":{"type":"enabled"}}',
               },
               qwen: {
                 url: 'https://token-plan.maas.qwencloudapi.com/compatible-mode/v1/chat/completions',
                 secret: 'QWEN_API_KEY',
+                extraBody: '{"enable_thinking":true}',
               },
             };
 
@@ -103,6 +105,7 @@ jobs:
               core.setOutput('model', model.id);
               core.setOutput('llm_url', provider.url);
               core.setOutput('llm_auth_secret', provider.secret);
+              core.setOutput('llm_extra_body', provider.extraBody);
               core.setOutput('base_ref', pr.base.ref);
               core.setOutput('head_sha', pr.head.sha);
             } catch (error) {
@@ -166,6 +169,7 @@ jobs:
           llm_auth_token: ${{ secrets[steps.pr.outputs.llm_auth_secret] }}
           llm_model: ${{ steps.pr.outputs.model }}
           llm_use_anthropic: 'false'
+          llm_extra_body: ${{ steps.pr.outputs.llm_extra_body }}
           base_ref: ${{ steps.pr.outputs.base_ref }}
           head_sha: ${{ steps.pr.outputs.head_sha }}
           rule: ${{ steps.rules.outputs.path }}
